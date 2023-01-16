@@ -42,7 +42,7 @@ describe("Triterras", function () {
     })
 
 
-    //***************** Seller to Trader***************************
+    // //***************** Seller to Trader***************************
 
 
     //*****************failing Trade Order By invalid seller  ***************************
@@ -54,11 +54,11 @@ describe("Triterras", function () {
         try {
             await triterras.connect(trader).createOrder(tradeNumber, assetName, trader.address, totalAmount, tradeType);
         } catch (error) {
-            console.log("ERROR", error.message);
+            expect(error.message).to.equal("VM Exception while processing transaction: reverted with custom error 'InvalidSeller()'");
         }
     });
 
-    //*****************failing Trade Order By Seller by adding invalide Trader that doesnot approved as a trader***********
+     //*****************failing Trade Order By Seller by adding invalide Trader that doesnot approved as a trader***********
 
     it("invalid Trader", async () => {
         const tradeNumber = 1;
@@ -68,7 +68,7 @@ describe("Triterras", function () {
         try {
             await triterras.connect(seller).createOrder(tradeNumber, assetName, trader1.address, totalAmount, tradeType);
         } catch (error) {
-            console.log("ERROR", error.message);
+            expect(error.message).to.equal("VM Exception while processing transaction: reverted with custom error 'InvalidTrader()'");
         }
     });
 
@@ -81,11 +81,11 @@ describe("Triterras", function () {
         try {
             await triterras.connect(seller).createOrder(tradeNumber, assetName, trader.address, totalAmount, tradeType);
         } catch (error) {
-            console.log("ERROR", error.message);
+            expect(error.message).to.equal("VM Exception while processing transaction: reverted with custom error 'InvalidTrader()'");
         }
     });
 
-    //***************************************create new seller Order***************************************
+     //***************************************create new seller Order***************************************
 
     it("create a new trade Order", async () => {
         const tradeNumber = 1;
@@ -104,7 +104,7 @@ describe("Triterras", function () {
     });
 
 
-    //*****************Trader to Buyer***************************
+                            //*****************Trader to Buyer***************************
 
     //*****************failing Trade Order By invalid Trader**************************
 
@@ -116,7 +116,7 @@ describe("Triterras", function () {
         try {
             await triterras.connect(trader1).createOrder(tradeNumber, assetName, buyer.address, totalAmount, tradeType);
         } catch (error) {
-            console.log("ERROR", error.message);
+            expect(error.message).to.equal("VM Exception while processing transaction: reverted with custom error 'InvalidTrader()'");
         }
     });
 
@@ -129,7 +129,8 @@ describe("Triterras", function () {
         try {
             await triterras.connect(trader).createOrder(tradeNumber, assetName, buyer.address, totalAmount, tradeType);
         } catch (error) {
-            console.log("ERROR", error.message);
+            expect(error.message).to.equal("VM Exception while processing transaction: reverted with custom error 'InvalidTradeNumber()'");
+           
         }
     });
     //*****************failing Trade Order By Invalid Trade Type**************************
@@ -141,7 +142,7 @@ describe("Triterras", function () {
         try {
             await triterras.connect(trader).createOrder(tradeNumber, assetName, buyer.address, totalAmount, tradeType);
         } catch (error) {
-            console.log("ERROR", error.message);
+            expect(error.message).to.equal("VM Exception while processing transaction: reverted with custom error 'InvalidBuyer()'");
         }
     });
 
@@ -176,7 +177,8 @@ describe("Triterras", function () {
         try {
             await triterras.connect(buyer1).createOrder(tradeNumber, assetName, trader.address, totalAmount, tradeType);
         } catch (error) {
-            console.log("ERROR", error.message);
+            expect(error.message).to.equal("VM Exception while processing transaction: reverted with custom error 'InvalidBuyer()'");
+            
         }
     });
 
@@ -189,7 +191,7 @@ describe("Triterras", function () {
         try {
             await triterras.connect(buyer).createOrder(tradeNumber, assetName, trader.address, totalAmount, tradeType);
         } catch (error) {
-            console.log("ERROR", error.message);
+            expect(error.message).to.equal("VM Exception while processing transaction: reverted with custom error 'InvalidTrader()'");
         }
     });
 
@@ -202,7 +204,7 @@ describe("Triterras", function () {
         try {
             await triterras.connect(buyer).createOrder(tradeNumber, assetName, trader.address, totalAmount, tradeType);
         } catch (error) {
-            console.log("ERROR", error.message);
+            expect(error.message).to.equal("VM Exception while processing transaction: reverted with custom error 'InvalidTradeNumber()'");   
         }
     });
 
@@ -245,7 +247,6 @@ describe("Triterras", function () {
             expect(error.message).to.equal
                 ("VM Exception while processing transaction: reverted with custom error 'InvalidCallerAddress()'");
         }
-
     })
     //Trader to buyer
     it("agree To Trade by Unapproved Address", async () => {
@@ -295,7 +296,7 @@ describe("Triterras", function () {
     //seller to Trader
     it("update LC by seller ITself", async () => {
         try {
-            await triterras.connect(seller).updateLC(1, "hiterslash");
+            await triterras.connect(seller).updateLC(1, "hiterslashew");
         } catch (error) {
             expect(error.message).to.equal
                 ("VM Exception while processing transaction: reverted with custom error 'InvalidCallerAddress()'");
@@ -303,7 +304,7 @@ describe("Triterras", function () {
     })
     it("update LC by trader of others TradeNumber", async () => {
         try {
-            await triterras.connect(trader).updateLC(2, "hiterslash");
+            await triterras.connect(trader).updateLC(2, "hiterslashi");
         } catch (error) {
             expect(error.message).to.equal
                 ("VM Exception while processing transaction: reverted with custom error 'InvalidCallerAddress()'");
@@ -319,12 +320,11 @@ describe("Triterras", function () {
             expect(error.message).to.equal
                 ("VM Exception while processing transaction: reverted with custom error 'InvalidCallerAddress()'");
         }
-
     })
 
     it("update LC by Buyer of others TradeNumber", async () => {
         try {
-            await triterras.connect(buyer).updateLC(3, "hiterslash");
+            await triterras.connect(buyer1).updateLC(3, "hiterslashqwe");
         } catch (error) {
             expect(error.message).to.equal
                 ("VM Exception while processing transaction: reverted with custom error 'InvalidCallerAddress()'");
@@ -339,14 +339,12 @@ describe("Triterras", function () {
         await triterras.connect(trader).updateLC(1, "seller to trader");
         // const order=await triterras.OrderDetails(1);
         // console.log(order,"order Details");
-
     })
     //Trader to Buyer
     it("update LC ", async () => {
         await triterras.connect(buyer).updateLC(2, "trader To BUYER");
         // const order=await triterras.OrderDetails(2);
         // console.log(order,"order Details");
-
     })
     //Buyer To Trader
     it("update LC ", async () => {
@@ -359,18 +357,17 @@ describe("Triterras", function () {
     it("Verify LC Seller to Trader with Wrong Trade Number", async () => {
         try {
             const tradeNumber = 2;
-            await triterras.connect(seller).verifyLC(tradeNumber);
+            await triterras.connect(seller).verifyLC(tradeNumber,"verifyLC SELLER TO trader");
         } catch (error) {
             expect(error.message).to.equal
                 ("VM Exception while processing transaction: reverted with custom error 'InvalidCallerAddress()'");
         }
-
     })
 
     it("Verify LC Seller to Trader with Trade Number That doesnot exist", async () => {
         try {
             const tradeNumber = 103;
-            await triterras.connect(seller).verifyLC(tradeNumber);
+            await triterras.connect(seller).verifyLC(tradeNumber,"verifyLC SELLER TO trader");
         } catch (error) {
             expect(error.message).to.equal
                 ("VM Exception while processing transaction: reverted with custom error 'InvalidTradeNumber()'");
@@ -381,7 +378,7 @@ describe("Triterras", function () {
     it("Verify LC Seller to Trader with Trader Address", async () => {
         try {
             const tradeNumber = 1;
-            await triterras.connect(trader).verifyLC(tradeNumber);
+            await triterras.connect(trader).verifyLC(tradeNumber,"verifyLC SELLER TO trader");
         } catch (error) {
             expect(error.message).to.equal
                 ("VM Exception while processing transaction: reverted with custom error 'InvalidCallerAddress()'");
@@ -392,7 +389,7 @@ describe("Triterras", function () {
     it("Verify LC Trader to Buyer with Wrong Trade Number", async () => {
         try {
             const tradeNumber = 1;
-            await triterras.connect(trader).verifyLC(tradeNumber);
+            await triterras.connect(trader).verifyLC(tradeNumber,"verify lc trader to buyer");
         } catch (error) {
             expect(error.message).to.equal
                 ("VM Exception while processing transaction: reverted with custom error 'InvalidCallerAddress()'");
@@ -402,7 +399,7 @@ describe("Triterras", function () {
     it("Verify LC Trader to Buyer with Trade Number That doesnot exist", async () => {
         try {
             const tradeNumber = 101;
-            await triterras.connect(trader).verifyLC(tradeNumber);
+            await triterras.connect(trader).verifyLC(tradeNumber,"verify lc trader to buyer");
         } catch (error) {
             expect(error.message).to.equal
                 ("VM Exception while processing transaction: reverted with custom error 'InvalidTradeNumber()'");
@@ -412,7 +409,7 @@ describe("Triterras", function () {
     it("Verify LC Trader to Buyer with Buyer Address", async () => {
         try {
             const tradeNumber = 2;
-            await triterras.connect(buyer).verifyLC(tradeNumber);
+            await triterras.connect(buyer).verifyLC(tradeNumber,"verify lc trader to buyer");
         } catch (error) {
             expect(error.message).to.equal
                 ("VM Exception while processing transaction: reverted with custom error 'InvalidCallerAddress()'");
@@ -422,7 +419,7 @@ describe("Triterras", function () {
     it("Verify LC buyer to Trader with wrong trade Number", async () => {
         try {
             const tradeNumber = 1;
-            await triterras.connect(trader).verifyLC(tradeNumber);
+            await triterras.connect(trader).verifyLC(tradeNumber,"buyer to trader");
         } catch (error) {
             expect(error.message).to.equal
                 ("VM Exception while processing transaction: reverted with custom error 'InvalidCallerAddress()'");
@@ -431,7 +428,7 @@ describe("Triterras", function () {
     it("Verify LC buyer to Trader with Trade Number That doesnot exist", async () => {
         try {
             const tradeNumber = 101;
-            await triterras.connect(trader).verifyLC(tradeNumber);
+            await triterras.connect(trader).verifyLC(tradeNumber,"buyer to trader");
         } catch (error) {
             expect(error.message).to.equal
                 ("VM Exception while processing transaction: reverted with custom error 'InvalidTradeNumber()'");
@@ -440,7 +437,7 @@ describe("Triterras", function () {
     it("Verify LC buyer to Trader with buyer Address", async () => {
         try {
             const tradeNumber = 3;
-            await triterras.connect(buyer).verifyLC(tradeNumber);
+            await triterras.connect(buyer).verifyLC(tradeNumber,"buyer to trader");
         } catch (error) {
             expect(error.message).to.equal
                 ("VM Exception while processing transaction: reverted with custom error 'InvalidCallerAddress()'");
@@ -453,21 +450,21 @@ describe("Triterras", function () {
     //seller to Trader
     it("Verify LC Seller to Trader", async () => {
         const tradeNumber = 1;
-        await triterras.connect(seller).verifyLC(tradeNumber);
+        await triterras.connect(seller).verifyLC(tradeNumber,"verify Seller TO Trader");
         // const order=await triterras.OrderDetails(1);
         // console.log(order,"order Details");
     })
     //Trader to Buyer
     it("Verify LC Trader to Buyer", async () => {
         const tradeNumber = 2;
-        await triterras.connect(trader).verifyLC(tradeNumber);
+        await triterras.connect(trader).verifyLC(tradeNumber,"verify Trader to Buyer");
         // const order=await triterras.OrderDetails(2);
         // console.log(order,"order Details");
     })
     //Buyer To Trader
     it("Verify LC Buyer to Trader", async () => {
         const tradeNumber = 3;
-        await triterras.connect(trader).verifyLC(tradeNumber);
+        await triterras.connect(trader).verifyLC(tradeNumber,"verify Buyer to Trader");
         // const order=await triterras.OrderDetails(3);
         // console.log(order,"order Details");
     })
@@ -478,7 +475,7 @@ describe("Triterras", function () {
             const tradeNumber = 110;
             const hash = await triterras.getIssueLcHash(tradeNumber);
         } catch (error) {
-
+            
         }
 
     })
@@ -626,19 +623,18 @@ describe("Triterras", function () {
     it("Verify BL Seller to Trader with Wrong Trade Number", async () => {
         try {
             const tradeNumber = 2;
-            await triterras.connect(trader).verifyBL(tradeNumber);
+            await triterras.connect(trader).verifyBL(tradeNumber,"seller to Trader");
 
         } catch (error) {
             expect(error.message).to.equal
                 ("VM Exception while processing transaction: reverted with custom error 'InvalidCallerAddress()'");
         }
-
     })
 
     it("Verify BL Seller to Trader with Trade Number That doesnot exist", async () => {
         try {
             const tradeNumber = 103;
-            await triterras.connect(trader).verifyBL(tradeNumber);
+            await triterras.connect(trader).verifyBL(tradeNumber,"seller to Trader");
 
         } catch (error) {
             expect(error.message).to.equal
@@ -650,7 +646,7 @@ describe("Triterras", function () {
     it("Verify BL Seller to Trader with seller Address", async () => {
         try {
             const tradeNumber = 1;
-            await triterras.connect(seller).verifyBL(tradeNumber);
+            await triterras.connect(seller).verifyBL(tradeNumber,"seller to Trader");
         } catch (error) {
             expect(error.message).to.equal
                 ("VM Exception while processing transaction: reverted with custom error 'InvalidCallerAddress()'");
@@ -661,7 +657,7 @@ describe("Triterras", function () {
     it("Verify BL Trader to Buyer with Wrong Trade Number", async () => {
         try {
             const tradeNumber = 1;
-            await triterras.connect(buyer).verifyBL(tradeNumber);
+            await triterras.connect(buyer).verifyBL(tradeNumber,"Trader to Buyer");
         } catch (error) {
             expect(error.message).to.equal
                 ("VM Exception while processing transaction: reverted with custom error 'InvalidCallerAddress()'");
@@ -671,7 +667,7 @@ describe("Triterras", function () {
     it("Verify BL Trader to Buyer with Trade Number That doesnot exist", async () => {
         try {
             const tradeNumber = 101;
-            await triterras.connect(buyer).verifyBL(tradeNumber);
+            await triterras.connect(buyer).verifyBL(tradeNumber,"Trader to Buyer");
         } catch (error) {
             expect(error.message).to.equal
                 ("VM Exception while processing transaction: reverted with custom error 'InvalidTradeNumber()'");
@@ -681,7 +677,7 @@ describe("Triterras", function () {
     it("Verify BL Trader to Buyer with trader Address", async () => {
         try {
             const tradeNumber = 2;
-            await triterras.connect(trader).verifyBL(tradeNumber);
+            await triterras.connect(trader).verifyBL(tradeNumber,"Trader to Buyer");
         } catch (error) {
             expect(error.message).to.equal
                 ("VM Exception while processing transaction: reverted with custom error 'InvalidCallerAddress()'");
@@ -691,7 +687,7 @@ describe("Triterras", function () {
     it("Verify BL Buyer TO Trader with wrong trade Number", async () => {
         try {
             const tradeNumber = 1;
-            await triterras.connect(buyer).verifyBL(tradeNumber);
+            await triterras.connect(buyer).verifyBL(tradeNumber,"BuyertoTrader");
         } catch (error) {
             expect(error.message).to.equal
                 ("VM Exception while processing transaction: reverted with custom error 'InvalidCallerAddress()'");
@@ -700,7 +696,7 @@ describe("Triterras", function () {
     it("Verify BL Buyer TO Trader with Trade Number That doesnot exist", async () => {
         try {
             const tradeNumber = 101;
-            await triterras.connect(buyer).verifyBL(tradeNumber);
+            await triterras.connect(buyer).verifyBL(tradeNumber,"BuyertoTrader");
         } catch (error) {
             expect(error.message).to.equal
                 ("VM Exception while processing transaction: reverted with custom error 'InvalidTradeNumber()'");
@@ -709,7 +705,7 @@ describe("Triterras", function () {
     it("Verify BL buyer to Trader with trader Address", async () => {
         try {
             const tradeNumber = 3;
-            await triterras.connect(trader).verifyBL(tradeNumber);
+            await triterras.connect(trader).verifyBL(tradeNumber,"BuyertoTrader");
         } catch (error) {
             expect(error.message).to.equal
                 ("VM Exception while processing transaction: reverted with custom error 'InvalidCallerAddress()'");
@@ -720,32 +716,32 @@ describe("Triterras", function () {
     //seller to Trader
     it("Verify BL Seller to Trader", async () => {
         const tradeNumber = 1;
-        await triterras.connect(trader).verifyBL(tradeNumber);
+        await triterras.connect(trader).verifyBL(tradeNumber,"Verify BL Seller to Trader");
         // const order=await triterras.OrderDetails(1);
         // console.log(order,"order Details");
     })
     //Trader to Buyer
     it("Verify BL Trader to Buyer", async () => {
         const tradeNumber = 2;
-        await triterras.connect(buyer).verifyBL(tradeNumber);
+        await triterras.connect(buyer).verifyBL(tradeNumber,"Verify BL Trader to Buyer");
         // const order=await triterras.OrderDetails(2);
         // console.log(order,"order Details");
     })
     //Buyer To Trader
     it("Verify BL Buyer to Trader", async () => {
         const tradeNumber = 3;
-        await triterras.connect(buyer).verifyBL(tradeNumber);
+        await triterras.connect(buyer).verifyBL(tradeNumber,"Verify BL Buyer to Trader");
         // const order=await triterras.OrderDetails(3);
         // console.log(order,"order Details");
     })
 
 
-    //***************************************getBLHash Failing ***************************************
+    // //***************************************getBLHash Failing ***************************************
 
-    it("getBlHash of tradenumber that doesnot exist", async () => {
+    it("getHash of tradenumber that doesnot exist", async () => {
         try {
             const tradeNumber = 110;
-            const hash = await triterras.getBlHash(tradeNumber);
+            const hash = await triterras.getAllHash(tradeNumber);
         } catch (error) {
 
         }
@@ -754,9 +750,9 @@ describe("Triterras", function () {
     //***************************************getBlHash ***************************************
 
     //seller to trader hash
-    it("getBlHash", async () => {
+    it("getALLHash", async () => {
         const tradeNumber = 1;
-        const hash = await triterras.getBlHash(tradeNumber);
+        const hash = await triterras.getAllHash(tradeNumber);
         // console.log(hash,"hash");
     })
 
@@ -770,7 +766,7 @@ describe("Triterras", function () {
     //allTradingNumbers()
     it("getting Details of All TradeNumber", async () => {
         const order = await triterras.allTradingNumbers();
-        console.log(order, "order Details");
+        // console.log(order, "order Details");
     })
 
 

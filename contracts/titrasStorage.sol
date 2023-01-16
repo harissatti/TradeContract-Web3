@@ -8,9 +8,9 @@ library titrasStorage  {
         address toAddress;
         uint256 totalAmount;
         string LcHash;
-        bool verifyLC;
+        string verifyLC;
         string blHash;
-        bool verifyBl;
+        string verifyBl;
         bool  acceptTrade;
         uint256 tradeType;
     }
@@ -43,8 +43,8 @@ library titrasStorage  {
         uint256,
         string memory,
         string memory,
-        bool,
-        bool,
+        string memory,
+        string memory,
         bool) 
     {
         return (
@@ -77,10 +77,11 @@ library titrasStorage  {
     }
 
     function setVerifyTradingBL(
-    trading storage self
+    trading storage self,
+     string memory _blHash
     )internal
     {
-        self.verifyBl=true;
+        self.verifyBl=_blHash;
     }
 
 
@@ -91,11 +92,13 @@ library titrasStorage  {
     )internal{
         self.LcHash=_LcHash;
     }
+   
     function setVerifyTradingLC(
-    trading storage self
+    trading storage self,
+    string memory _LcHash
     )internal
     {
-        self.verifyLC=true;
+        self.verifyLC=_LcHash;
     }
 
     function peelTradeNumber(
@@ -154,11 +157,31 @@ library titrasStorage  {
        return self.LcHash;
     }
 
+    //verify LC
+
+    function tradingVerifyLC(
+    trading storage self
+    )internal view returns(string memory)
+    {
+       return self.verifyLC;
+    }
+
+    //BL Hash
+
     function tradingBlHash(
     trading storage self
     )internal view returns(string memory){
        return self.blHash;
     }
+
+    // verify BL hash
+    function tradingVerifyBL(
+    trading storage self
+    )internal view returns(string memory)
+    {
+       return self.verifyBl;
+    }
+
     function isTradingBlHashEmpty(
     trading storage self
     )internal view returns(bool){
@@ -172,26 +195,27 @@ library titrasStorage  {
     )internal view returns(bool){
        return bytes(self.LcHash).length == 0;
     }
+    //Checking  verifying bl Hash is empty or not
+     function isTradingVerifyBLHashEmpty(
+    trading storage self
+    )internal view returns(bool){
+       return bytes(self.verifyBl).length == 0;
+    }
 
-//    function tradingVerifyBl(
-//     trading storage self
-//     )internal view returns(string memory)
-//     {
-//        return self.verifyBl;
-//     }
 
-    // //acceptTrade
-    // function tradingAcceptTrade(
-    //     trading storage self
-    // )internal view returns(bool)
-    // {
-    //   return self.acceptTrade;
-    // }
+     //Checking  verifying LC Hash is empty or not
+     function isTradingVerifyLCHashEmpty(
+    trading storage self
+    )internal view returns(bool){
+       return bytes(self.verifyLC).length == 0;
+    }
+
     
     function tradingType(
     trading storage self
     )internal view returns(uint256){
         return self.tradeType;
     }
+    
 
 }

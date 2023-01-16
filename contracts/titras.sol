@@ -12,6 +12,9 @@ error AllReadyAgreed();
 error InvalidCallerAddress();
 error NotAcceptedYet();
 error NotBLAddedYet();
+error LcNotAddYet();
+error AllreadyAdd();
+error LCNotVerifyYet();
 
 contract Triterras is AccessControl {
     bytes32 public constant BUYER_ROLE = keccak256("BUYER_ROLE");
@@ -124,8 +127,8 @@ contract Triterras is AccessControl {
         uint256,
         string memory,
         string memory,
-        bool,
-        bool,
+        string memory,
+        string memory,
         bool){
         return _trading[_tradeNumber]._tradingDetails();
     }
@@ -152,17 +155,19 @@ contract Triterras is AccessControl {
        //Trader updating LC so the seller can accept LC or reject it
     function updateLC(uint256 tradeNumber,string memory hash)public{
       if(!_trading[tradeNumber].peelTradeNumber()){revert InvalidTradeNumber();}
+      if(!_trading[tradeNumber].isTradingLCHashEmpty()){revert AllreadyAdd();}
       if(!_trading[tradeNumber].isAcceptTrading()){revert NotAcceptedYet();}
       if(_trading[tradeNumber].tradingToAddress()!=msg.sender){revert InvalidCallerAddress();}
       _trading[tradeNumber].setTradingLC(hash);
     }
 
      //verifying LC 
-    function verifyLC(uint256 tradeNumber)public{
+    function verifyLC(uint256 tradeNumber,string memory hash)public{
       if(!_trading[tradeNumber].peelTradeNumber()){revert InvalidTradeNumber();}
-      if(_trading[tradeNumber].isTradingLCHashEmpty()){revert NotBLAddedYet();}
+      if(!_trading[tradeNumber].isTradingVerifyLCHashEmpty()){revert AllreadyAdd();}
+      if(_trading[tradeNumber].isTradingLCHashEmpty()){revert LcNotAddYet();}
       if(_trading[tradeNumber].tradingFromAddress()!=msg.sender){revert InvalidCallerAddress();}
-      _trading[tradeNumber].setVerifyTradingLC();
+      _trading[tradeNumber].setVerifyTradingLC(hash);
     }
 
     //trading LC Hash
@@ -180,29 +185,44 @@ contract Triterras is AccessControl {
     //updateing BL
      function updateBL(uint256 tradeNumber,string memory hash)public{
       if(!_trading[tradeNumber].peelTradeNumber()){revert InvalidTradeNumber();}
-      if(!_trading[tradeNumber].isAcceptTrading()){revert NotAcceptedYet();}
+      if(!_trading[tradeNumber].isTradingBlHashEmpty()){revert AllreadyAdd();}
+      if(_trading[tradeNumber].isTradingVerifyLCHashEmpty()){revert LCNotVerifyYet();}
       if(_trading[tradeNumber].tradingFromAddress()!=msg.sender){revert InvalidCallerAddress();}
       _trading[tradeNumber].setTradingBL(hash);
     }
     
     //verifying BL
-    function verifyBL(uint256 tradeNumber)public{
+    function verifyBL(uint256 tradeNumber,string memory hash)public{
       if(!_trading[tradeNumber].peelTradeNumber()){revert InvalidTradeNumber();}
+      if(!_trading[tradeNumber].isTradingVerifyBLHashEmpty()){revert AllreadyAdd();}
       if(_trading[tradeNumber].isTradingBlHashEmpty()){revert NotBLAddedYet();}
       if(_trading[tradeNumber].tradingToAddress()!=msg.sender){revert InvalidCallerAddress();}
-      _trading[tradeNumber].setVerifyTradingBL();
+      _trading[tradeNumber].setVerifyTradingBL(hash);
     }
 
    
     //Trading BL Hash
-    function getBlHash(uint256 tradeNumber) public virtual view returns(string memory) {
-    if(!_trading[tradeNumber].peelTradeNumber()){revert InvalidTradeNumber();}
-    string memory baseURI = _baseURI();
-    string memory hash=_trading[tradeNumber].tradingBlHash();
-    return
-        bytes(baseURI).length > 0
-        ? string(abi.encodePacked(baseURI,hash))
-        : "";   
+     function getAllHash(uint256 tradeNumber) public virtual view returns(string memory,string memory,string memory,string memory) {
+        if(!_trading[tradeNumber].peelTradeNumber()){revert InvalidTradeNumber();}
+        string memory baseURI = _baseURI();
+        string memory hash = _trading[tradeNumber].tradingIssueLC();
+        string memory hash1 = _trading[tradeNumber].tradingVerifyLC();
+        string memory hash2=_trading[tradeNumber].tradingBlHash();
+        string memory hash3 = _trading[tradeNumber].tradingVerifyBL();
+        return (
+            bytes(baseURI).length > 0
+            ? string(abi.encodePacked(baseURI,hash))
+            : "",
+            bytes(baseURI).length > 0
+            ? string(abi.encodePacked(baseURI,hash1))
+            : "",
+            bytes(baseURI).length > 0
+            ? string(abi.encodePacked(baseURI,hash2))
+            : "",
+             bytes(baseURI).length > 0
+            ? string(abi.encodePacked(baseURI,hash3))
+            : ""
+         );
     }
 
 
